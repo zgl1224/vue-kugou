@@ -1,28 +1,49 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+		<Loading v-if="$root.loading"></Loading>
+		<HeaderLogo v-if="$root.logo"></HeaderLogo>
+		<router-view ></router-view>
+		<ZglToolbar ></ZglToolbar>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import HeaderLogo from './layout/zgl-header-logo.vue'
+import Loading from './components/zgl-loading/zgl-loading.vue'
+import ZglToolbar from './layout/zgl-toolbar.vue'
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+	data(){
+		return {
+		}
+	},
+	mounted(){
+	},
+	methods:{
+	},
+	components: {
+	 HeaderLogo,ZglToolbar,Loading
+  },
+	watch:{
+		$route:{
+			handler(newVal){
+				let path = newVal.path;
+				// console.log(path);
+				if(/home|ranklist|songlist/.test(path)){
+					this.$root.logo = true;
+				}
+				if(/user|detail/.test(path)){
+					this.$root.logo = false;
+				}
+				if(/login|reg/.test(path)){
+					this.$root.logo = false;
+					this.$root.loading=false;
+				}
+			},
+			immediate:true
+		}
+	},
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
 </style>
